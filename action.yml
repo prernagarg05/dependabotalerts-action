@@ -1,0 +1,16 @@
+name: 'Dependabot vulnerabilities alerts'
+description: 'Dependabot vulnerabilities alerts from Github'
+inputs:
+  token: 
+    description: 'Github repository token'
+    required: true
+  repo: 
+    description: 'Github repository as owner/repo'
+    required: true
+  output:
+    description: 'Path to output file. defaults to dependabotalerts.json'
+    default: 'dependabotalerts.json'
+    required: true
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
