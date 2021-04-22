@@ -22,10 +22,10 @@ jobs:
 
 ## Hacking
 
-To test locally, install [act](https://github.com/nektos/act). Put seccrets in `.env` file.
+To test locally, install [act](https://github.com/nektos/act). Put secrets `DEPENDABOTALERTS_TOKEN=***` in `.secrets` file.
 Launch:
 
 ```shell
 npm run all
-act --env-file .env -j test
+act -j test
 ```
