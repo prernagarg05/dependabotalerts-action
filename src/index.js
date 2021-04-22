@@ -16,8 +16,7 @@ async function run() {
     for (repo in repositories) {
       core.info(`Fetching dependabot alerts from Github on ${repo} ...`);
       results = await alerts(repo, token);
-      const resJson = JSON.parse(results);
-      allResults.push(resJson.repository);
+      allResults.push(results.repository);
     }
     fs.writeFileSync(output, JSON.stringify(allResults));
   } catch (error) {
