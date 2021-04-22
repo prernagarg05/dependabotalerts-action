@@ -19,3 +19,13 @@ jobs:
           repositories: '["MTES-MCT/dashlord", "MTES-MCT/dependabotalerts-action"]'
           output: dependabotalerts.json
 ```
+
+## Hacking
+
+To test locally, install [act](https://github.com/nektos/act). Put seccrets in `.env` file.
+Launch:
+
+```shell
+npm run all
+act --env-file .env -j test
+```

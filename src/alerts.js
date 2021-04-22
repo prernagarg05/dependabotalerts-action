@@ -36,7 +36,7 @@ const getRepo = (repoUrl) => {
  * @returns {GraphQlResponse}
  */
 const alerts = (repoUrl, token) => {
-  console.warn(`fetch Gihub dependabot alerts for ${repoUrl}`);
+  console.warn(`Fetch Gihub dependabot alerts for ${repoUrl}`);
   const query = `query alerts($repo: String!, $owner: String!) {
     repository(name: $repo, owner: $owner) {
       url
