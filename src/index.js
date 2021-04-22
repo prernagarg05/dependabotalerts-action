@@ -5,13 +5,21 @@ const alerts = require("./alerts");
 
 async function run() {
   try {
-    const repo = core.getInput("repo");
+    const repositoriesString = core.getInput("repositories");
+    const repositories = JSON.parse(repositoriesString);
     const token = core.getInput("token");
     core.setSecret(token);
     const output = core.getInput("output");
-    core.info(`Fetching dependabot alerts from Github on ${repo} ...`);
-    const results = await alerts(repo, token);
-    fs.writeFileSync(output, JSON.stringify(results));
+    var repo;
+    var results;
+    const allResults = JSON.parse('[]');
+    for (repo in repositories) {
+      core.info(`Fetching dependabot alerts from Github on ${repo} ...`);
+      results = await alerts(repo, token);
+      const resJson = JSON.parse(results);
+      allResults.push(resJson.repository);
+    }
+    fs.writeFileSync(output, JSON.stringify(allResults));
   } catch (error) {
     core.setFailed(error.message);
   }

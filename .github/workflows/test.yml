@@ -22,11 +22,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Run on MTES-MCT/dashlord
+    - name: Run on MTES-MCT/dashlord and MTES-MCT/dependabotalerts-action
       uses: ./
       with:
         token: ${{ secrets.DEPENDABOTALERTS_TOKEN }}
-        repo: MTES-MCT/dashlord
+        repositories: '["MTES-MCT/dashlord", "MTES-MCT/dependabotalerts-action"]'
         output: dependabotalerts.json
     - run: |
         cat dependabotalerts.json

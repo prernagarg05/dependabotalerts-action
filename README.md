@@ -16,6 +16,6 @@ jobs:
       - uses: "MTES-MCT/dependabotalerts-action@main"
         with:
           token: ${{ secrets.DEPENDABOTALERTS_TOKEN }}
-          repo: MTES-MCT/dashlord
+          repositories: '["MTES-MCT/dashlord", "MTES-MCT/dependabotalerts-action"]'
           output: dependabotalerts.json
 ```
