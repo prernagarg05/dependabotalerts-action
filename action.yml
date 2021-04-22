@@ -5,7 +5,7 @@ inputs:
     description: 'Github repository token'
     required: true
   repositories: 
-    description: `Github repositories as JSON array e.g. '["owner/repo1", "owner/repo2"]'`
+    description: 'Github repositories as JSON array e.g. \'[\"owner/repo1\", \"owner/repo2\"]\''
     required: true
   output:
     description: 'Path to output file. defaults to dependabotalerts.json'
