@@ -50,6 +50,15 @@ const alerts = (repoUrl, token) => {
             package {
               name
             }
+            advisory {
+              identifiers {
+                type
+                value
+              }
+              references {
+                url
+              }
+            }
           }
         }
       }
