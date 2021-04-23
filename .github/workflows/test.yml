@@ -12,21 +12,28 @@ jobs:
     name: Unit tests
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - run: npm ci
-    - run: npm test
+      - uses: actions/checkout@v2
+      - run: npm ci
+      - run: npm test
 
   # test action works running from the graph
   test:
     name: Test GH Action
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Run on MTES-MCT/dashlord
-      uses: ./
-      with:
-        token: ${{ secrets.DEPENDABOTALERTS_TOKEN }}
-        repo: MTES-MCT/dashlord
-        output: dependabotalerts.json
-    - run: |
-        cat dependabotalerts.json
+      - name: Checkout Locally
+        uses: actions/checkout@v2
+        if: ${{ env.ACT }}
+        with:
+          path: "dependabotalerts-action"
+      - name: Checkout Github
+        uses: actions/checkout@v2
+        if: ${{ !env.ACT }}
+      - name: on MTES-MCT/action-bidonvilles and MTES-MCT/partaj
+        uses: ./
+        with:
+          token: ${{ secrets.DEPENDABOTALERTS_TOKEN }}
+          repositories: 'MTES-MCT/action-bidonvilles,MTES-MCT/partaj'
+          output: dependabotalerts.json
+      - run: |
+          cat dependabotalerts.json

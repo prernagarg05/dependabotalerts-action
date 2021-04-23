@@ -3488,7 +3488,7 @@ const getRepo = (repoUrl) => {
  * @returns {GraphQlResponse}
  */
 const alerts = (repoUrl, token) => {
-  console.warn(`fetch Gihub dependabot alerts for ${repoUrl}`);
+  console.warn(`Fetch Gihub dependabot alerts for ${repoUrl}`);
   const query = `query alerts($repo: String!, $owner: String!) {
     repository(name: $repo, owner: $owner) {
       url
@@ -3649,13 +3649,19 @@ const alerts = __nccwpck_require__(341);
 
 async function run() {
   try {
-    const repo = core.getInput("repo");
+    const repositoriesString = core.getInput("repositories");
+    // const repositories = JSON.parse(repositoriesString.toString());
+    const repositories = repositoriesString.split(',');
+    core.info(`Repositories JSON as ${JSON.stringify(repositories)} ...`);
     const token = core.getInput("token");
     core.setSecret(token);
     const output = core.getInput("output");
-    core.info(`Fetching dependabot alerts from Github on ${repo} ...`);
-    const results = await alerts(repo, token);
-    fs.writeFileSync(output, JSON.stringify(results));
+    var allResults = [];
+    await Promise.all(repositories.map(async (repo) => {
+      var results = await alerts(repo, token);
+      allResults.push(results.data.repository);
+    }));
+    fs.writeFileSync(output, JSON.stringify(allResults));
   } catch (error) {
     core.setFailed(error.message);
   }

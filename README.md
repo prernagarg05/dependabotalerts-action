@@ -16,6 +16,16 @@ jobs:
       - uses: "MTES-MCT/dependabotalerts-action@main"
         with:
           token: ${{ secrets.DEPENDABOTALERTS_TOKEN }}
-          repo: MTES-MCT/dashlord
+          repositories: 'MTES-MCT/dashlord,MTES-MCT/dependabotalerts-action'
           output: dependabotalerts.json
+```
+
+## Hacking
+
+To test locally, install [act](https://github.com/nektos/act). Put secrets `DEPENDABOTALERTS_TOKEN=***` in `.secrets` file.
+Launch:
+
+```shell
+npm run all
+act -j test
 ```
