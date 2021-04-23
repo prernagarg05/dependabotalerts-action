@@ -3650,7 +3650,8 @@ const alerts = __nccwpck_require__(341);
 async function run() {
   try {
     const repositoriesString = core.getInput("repositories");
-    const repositories = JSON.parse(repositoriesString.toString());
+    // const repositories = JSON.parse(repositoriesString.toString());
+    const repositories = repositoriesString.split(',');
     core.info(`Repositories JSON as ${JSON.stringify(repositories)} ...`);
     const token = core.getInput("token");
     core.setSecret(token);

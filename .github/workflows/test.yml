@@ -29,11 +29,11 @@ jobs:
       - name: Checkout Github
         uses: actions/checkout@v2
         if: ${{ !env.ACT }}
-      - name: on MTES-MCT/dashlord and MTES-MCT/dependabotalerts-action
+      - name: on MTES-MCT/action-bidonvilles and MTES-MCT/partaj
         uses: ./
         with:
           token: ${{ secrets.DEPENDABOTALERTS_TOKEN }}
-          repositories: '["MTES-MCT/action-bidonvilles", "MTES-MCT/partaj"]'
+          repositories: 'MTES-MCT/action-bidonvilles,MTES-MCT/partaj'
           output: dependabotalerts.json
       - run: |
           cat dependabotalerts.json
