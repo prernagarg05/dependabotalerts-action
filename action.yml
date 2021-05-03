@@ -11,6 +11,10 @@ inputs:
     description: 'Path to output file. defaults to dependabotalerts.json'
     default: 'dependabotalerts.json'
     required: true
+  maxAlerts:
+    description: 'Maximum alerts to fetch'
+    default: 20
+    required: true
 runs:
   using: 'node12'
   main: 'dist/index.js'

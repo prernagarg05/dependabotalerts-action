@@ -56,7 +56,7 @@ describe("fetch dependabot alerts from a Github repository", () => {
       }
     }).post('/graphql').reply(200, expectedJson);
 
-    const results = await alerts("octocat/hello-world", "test-token");
+    const results = await alerts("octocat/hello-world", "test-token", 20);
     expect(results).toEqual(expectedJson);
   });
 
@@ -71,7 +71,7 @@ describe("fetch dependabot alerts from a Github repository", () => {
       }
     }).post('/graphql').reply(200, expectedJson);
 
-    const results = await alerts("octocat/hello-world", "wrong-token");
+    const results = await alerts("octocat/hello-world", "wrong-token", 20);
     expect(results).toEqual(expectedJson);
 
   });

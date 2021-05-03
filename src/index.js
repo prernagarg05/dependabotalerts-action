@@ -11,9 +11,11 @@ async function run() {
     const token = core.getInput("token");
     core.setSecret(token);
     const output = core.getInput("output");
+    const maxAlerts = core.getInput("maxAlerts");
+    const max = parseInt(maxAlerts);
     var allResults = [];
     await Promise.all(repositories.map(async (repo) => {
-      var results = await alerts(repo, token);
+      var results = await alerts(repo, token, max);
       allResults.push(results.data.repository);
     }));
     fs.writeFileSync(output, JSON.stringify(allResults));

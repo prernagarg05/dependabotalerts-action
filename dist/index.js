@@ -3484,15 +3484,16 @@ const getRepo = (repoUrl) => {
  *
  * @param {string} repoUrl The repository url as owner/repo
  * @param {string} token The token to authenticate to Github API
+ * @param {number} maxAlerts The maximum alerts to fetch
  *
  * @returns {GraphQlResponse}
  */
-const alerts = (repoUrl, token) => {
-  console.warn(`Fetch Gihub dependabot alerts for ${repoUrl}`);
-  const query = `query alerts($repo: String!, $owner: String!) {
+const alerts = (repoUrl, token, maxAlerts) => {
+  console.warn(`Fetch first ${maxAlerts} Github dependabot alerts for ${repoUrl}`);
+  const query = `query alerts($repo: String!, $owner: String!, $max: Int!) {
     repository(name: $repo, owner: $owner) {
       url
-      vulnerabilityAlerts(first: 10) {
+      vulnerabilityAlerts(first: $max) {
         totalCount
         nodes {
           dismissedAt
@@ -3521,7 +3522,8 @@ const alerts = (repoUrl, token) => {
     query: query,
     variables: {
       owner: getOwner(repoUrl),
-      repo: getRepo(repoUrl)
+      repo: getRepo(repoUrl),
+      max: maxAlerts
     }
   }
   ).then(throwsNon200).then(response => response.data);
@@ -3650,15 +3652,16 @@ const alerts = __nccwpck_require__(341);
 async function run() {
   try {
     const repositoriesString = core.getInput("repositories");
-    // const repositories = JSON.parse(repositoriesString.toString());
     const repositories = repositoriesString.split(',');
     core.info(`Repositories JSON as ${JSON.stringify(repositories)} ...`);
     const token = core.getInput("token");
     core.setSecret(token);
     const output = core.getInput("output");
+    const maxAlerts = core.getInput("maxAlerts");
+    const max = parseInt(maxAlerts);
     var allResults = [];
     await Promise.all(repositories.map(async (repo) => {
-      var results = await alerts(repo, token);
+      var results = await alerts(repo, token, max);
       allResults.push(results.data.repository);
     }));
     fs.writeFileSync(output, JSON.stringify(allResults));
