@@ -18,7 +18,7 @@ jobs:
       - run: npm test
 
   # test action works running from the graph
-  test:
+  action:
     name: Test GH Action
     runs-on: ubuntu-latest
     steps:
@@ -37,5 +37,10 @@ jobs:
           repositories: 'MTES-MCT/action-bidonvilles,MTES-MCT/partaj'
           output: dependabotalerts.json
           maxAlerts: 20
-      - run: |
-          cat dependabotalerts.json
+      - name: test output
+        run: |
+          echo $(cat dependabotalerts.json)
+          tool=$(echo $(cat dependabotalerts.json | jq '. | length'))
+          if [[ ! "${tool[@]}" -gt 1 ]]; then
+            exit 1
+          fi

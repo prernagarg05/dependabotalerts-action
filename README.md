@@ -28,5 +28,6 @@ Launch:
 
 ```shell
 npm run all
-act -j test
+act -j units # unit tests
+act -j action # test Github action locally
 ```

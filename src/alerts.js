@@ -24,7 +24,22 @@ const getOwner = (repoUrl) => {
 const getRepo = (repoUrl) => {
   const args = repoUrl.split('/');
   return args.length > 1 ? args[1] : '';
+}
 
+const computeGrade = (data) => {
+  var grade = "A";
+  if (data && data.vulnerabilityAlerts) {
+    if (data.vulnerabilityAlerts.totalCount > 0 && data.vulnerabilityAlerts.nodes.filter((node) => node.securityVulnerability.severity === 'CRITICAL').length > 0)
+      grade = "E";
+    else if (data.vulnerabilityAlerts.totalCount > 0 && data.vulnerabilityAlerts.nodes.filter((node) => node.securityVulnerability.severity === 'HIGH').length > 0)
+      grade = "D";
+    else if (data.vulnerabilityAlerts.totalCount > 0 && data.vulnerabilityAlerts.nodes.filter((node) => node.securityVulnerability.severity === 'MODERATE').length > 0)
+      grade = "C";
+    else if (data.vulnerabilityAlerts.totalCount > 0 && data.vulnerabilityAlerts.nodes.filter((node) => node.securityVulnerability.severity === 'LOW').length > 0)
+      grade = "B";
+    data['grade'] = grade;
+  }
+  return data;
 }
 
 /**
@@ -74,7 +89,7 @@ const alerts = (repoUrl, token, maxAlerts) => {
       max: maxAlerts
     }
   }
-  ).then(throwsNon200).then(response => response.data);
+  ).then(throwsNon200).then(response => computeGrade(response.data));
 }
 
 module.exports = alerts;

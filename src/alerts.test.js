@@ -13,6 +13,7 @@ describe("fetch dependabot alerts from a Github repository", () => {
    const expectedJson = `{
     "repository": {
       "url": "https://github.com/octocat/hello-world",
+      "grade": "F",
       "vulnerabilityAlerts": {
         "totalCount": 1,
         "nodes": [
