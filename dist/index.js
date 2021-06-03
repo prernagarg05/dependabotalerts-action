@@ -3546,17 +3546,18 @@ const getRepo = (repoUrl) => {
 }
 
 const computeGrade = (data) => {
-  var grade = "A";
-  if (data && data.vulnerabilityAlerts) {
-    if (data.vulnerabilityAlerts.totalCount > 0 && data.vulnerabilityAlerts.nodes.filter((node) => node.securityVulnerability.severity === 'CRITICAL').length > 0)
+  if (data && data.repository && data.repository.vulnerabilityAlerts) {
+    var grade = "A";
+    const vulnerabilityAlerts = data.repository.vulnerabilityAlerts;
+    if (vulnerabilityAlerts.totalCount > 0 && vulnerabilityAlerts.nodes.filter((node) => node.securityVulnerability.severity === 'CRITICAL').length > 0)
       grade = "E";
-    else if (data.vulnerabilityAlerts.totalCount > 0 && data.vulnerabilityAlerts.nodes.filter((node) => node.securityVulnerability.severity === 'HIGH').length > 0)
+    else if (vulnerabilityAlerts.totalCount > 0 && vulnerabilityAlerts.nodes.filter((node) => node.securityVulnerability.severity === 'HIGH').length > 0)
       grade = "D";
-    else if (data.vulnerabilityAlerts.totalCount > 0 && data.vulnerabilityAlerts.nodes.filter((node) => node.securityVulnerability.severity === 'MODERATE').length > 0)
+    else if (vulnerabilityAlerts.totalCount > 0 && vulnerabilityAlerts.nodes.filter((node) => node.securityVulnerability.severity === 'MODERATE').length > 0)
       grade = "C";
-    else if (data.vulnerabilityAlerts.totalCount > 0 && data.vulnerabilityAlerts.nodes.filter((node) => node.securityVulnerability.severity === 'LOW').length > 0)
+    else if (vulnerabilityAlerts.totalCount > 0 && vulnerabilityAlerts.nodes.filter((node) => node.securityVulnerability.severity === 'LOW').length > 0)
       grade = "B";
-    data['grade'] = grade;
+    data.repository.grade = grade;
   }
   return data;
 }
@@ -3608,7 +3609,7 @@ const alerts = (repoUrl, token, maxAlerts) => {
       max: maxAlerts
     }
   }
-  ).then(throwsNon200).then(response => computeGrade(response.data));
+  ).then(throwsNon200).then(response => computeGrade(response.data.data));
 }
 
 module.exports = alerts;
@@ -3744,7 +3745,7 @@ async function run() {
     var allResults = [];
     await Promise.all(repositories.map(async (repo) => {
       var results = await alerts(repo, token, max);
-      allResults.push(results.data.repository);
+      allResults.push(results.repository);
     }));
     fs.writeFileSync(output, JSON.stringify(allResults));
   } catch (error) {

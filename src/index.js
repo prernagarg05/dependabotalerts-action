@@ -16,7 +16,7 @@ async function run() {
     var allResults = [];
     await Promise.all(repositories.map(async (repo) => {
       var results = await alerts(repo, token, max);
-      allResults.push(results.data.repository);
+      allResults.push(results.repository);
     }));
     fs.writeFileSync(output, JSON.stringify(allResults));
   } catch (error) {

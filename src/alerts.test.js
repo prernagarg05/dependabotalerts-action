@@ -10,10 +10,10 @@ describe("fetch dependabot alerts from a Github repository", () => {
   });
 
   test("should return alerts", async () => {
-   const expectedJson = `{
+   var expectedJson = JSON.parse(`{
+    "data": {
     "repository": {
       "url": "https://github.com/octocat/hello-world",
-      "grade": "F",
       "vulnerabilityAlerts": {
         "totalCount": 1,
         "nodes": [
@@ -50,7 +50,7 @@ describe("fetch dependabot alerts from a Github repository", () => {
         ]
       }
     }
-  }`;
+  }}`);
     nock('https://api.github.com', {
       reqheaders: {
         authorization: "token test-token"
@@ -58,14 +58,16 @@ describe("fetch dependabot alerts from a Github repository", () => {
     }).post('/graphql').reply(200, expectedJson);
 
     const results = await alerts("octocat/hello-world", "test-token", 20);
-    expect(results).toEqual(expectedJson);
+    expectedJson.data.repository.grade = "D";
+    expect(results).toEqual(expectedJson.data);
+    expect(results.repository.grade).toEqual("D");
   });
 
   test("should return error bad credentials", async () => {
-   const expectedJson = {
+   var expectedJson = { "data": {
       "message": "Bad credentials",
       "documentation_url": "https://docs.github.com/graphql"
-    };
+   }};
     nock('https://api.github.com', {
       reqheaders: {
         authorization: "token wrong-token"
@@ -73,7 +75,7 @@ describe("fetch dependabot alerts from a Github repository", () => {
     }).post('/graphql').reply(200, expectedJson);
 
     const results = await alerts("octocat/hello-world", "wrong-token", 20);
-    expect(results).toEqual(expectedJson);
+    expect(results).toEqual(expectedJson.data);
 
   });
   afterEach(() => {
