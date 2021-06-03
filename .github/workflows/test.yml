@@ -40,7 +40,7 @@ jobs:
       - name: test output
         run: |
           echo $(cat dependabotalerts.json)
-          tool=$(echo $(cat dependabotalerts.json | jq '. | length'))
+          tool=$(echo $(cat dependabotalerts.json | jq '.repositories | length'))
           if [[ ! "${tool[@]}" -gt 1 ]]; then
             exit 1
           fi
