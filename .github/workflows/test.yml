@@ -37,7 +37,7 @@ jobs:
           repositories: 'MTES-MCT/action-bidonvilles,MTES-MCT/partaj'
           output: dependabotalerts.json
           maxAlerts: 20
-      - name: test output
+      - name: test output1
         run: |
           echo $(cat dependabotalerts.json)
           tool=$(echo $(cat dependabotalerts.json | jq '.repositories | length'))
